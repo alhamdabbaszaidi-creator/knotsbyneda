@@ -1089,7 +1089,7 @@ window.doGoogleLogin = async function(){
     const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-            redirectTo: window.location.origin
+            redirectTo: "https://knotsbyneda1.netlify.app"
         }
     });
     if(error) document.getElementById('authError').textContent = error.message;
