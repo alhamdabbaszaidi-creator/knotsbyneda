@@ -1059,14 +1059,14 @@ async function refreshSession(){
     const { data } = await supabase.auth.getSession();
     currentSession = data.session;
     currentUser = data.session ? data.session.user : null;
-    document.getElementById('authNavLink').textContent = currentUser ? 'Log Out' : 'Login';
+    document.getElementById('authNavLink').textContent =     currentUser ? '✅ Signed In' : 'Login';
 }
 await refreshSession();
 
 supabase.auth.onAuthStateChange((_event, session) => {
     currentSession = session;
     currentUser = session ? session.user : null;
-    document.getElementById('authNavLink').textContent = currentUser ? 'Log Out' : 'Login';
+    document.getElementById('authNavLink').textContent =     currentUser ? '✅ Signed In' : 'Login';
 });
 
 window.handleAuthNavClick = function(){
