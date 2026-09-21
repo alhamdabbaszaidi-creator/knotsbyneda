@@ -1,1312 +1,1415 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Knots By Neda</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-
-<!--
-  SETUP: paste your own keys on the lines below before deploying.
-  SUPABASE_ANON_KEY and PAYPAL_CLIENT_ID are meant to be public / visible in
-  the browser. Never put a secret key here.
--->
-<script>
-  window.APP_CONFIG = {
-    SUPABASE_URL: "https://emjqamgjjrsocdeneiih.supabase.co",
-    SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVtanFhbWdqanJzb2NkZW5laWloIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk5MzEwMjYsImV4cCI6MjEwNTUwNzAyNn0.TevAJRdP1QKiI9S0vX4VzM0d8CcHBJ1ZLh2TWO5xB
-	DY",
-    PAYPAL_CLIENT_ID: "AYIriBrY7azFFWFgkFar8Dt3mIIchp0VufmSOZVuzsZcmxYl8BPQHSt-2wmRZGwPfv6oKuwO3UXmBIAy",
-    ZELLE_INFO: "your-zelle-email@example.com",
-    CASHAPP_INFO: "$YourCashtag"
-  };
-</script>
-
-<style>
-:root{
-    --cream:#fbf7f1;
-    --cream-2:#f6eee4;
-    --white:#fffdfa;
-    --brown:#a86b3f;
-    --brown-dark:#6d432b;
-    --brown-light:#c18a61;
-    --text:#49382c;
-    --muted:#75685d;
-    --line:#e7d9ca;
-    --footer:#cdb095;
-}
-
-*{box-sizing:border-box;margin:0;padding:0}
-
-html{scroll-behavior:smooth}
-
-body{
-    font-family:"Poppins",Arial,sans-serif;
-    background:var(--cream);
-    color:var(--text);
-}
-
-a{text-decoration:none;color:inherit}
-
-button{font-family:inherit}
-
-header{
-    height:64px;
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    z-index:1000;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:0 11.5%;
-    background:rgba(255,253,249,.96);
-    border-bottom:1px solid #eadfd3;
-    backdrop-filter:blur(12px);
-}
-
-.logo{
-    font-family:"Great Vibes",cursive;
-    font-size:2.05rem;
-    color:#603b26;
-    white-space:nowrap;
-}
-
-nav{
-    display:flex;
-    align-items:center;
-    gap:28px;
-}
-
-nav a{
-    position:relative;
-    font-family:"Playfair Display",serif;
-    font-size:.86rem;
-    color:#382b23;
-}
-
-nav a:first-child{color:var(--brown)}
-
-nav a:first-child::after{
-    content:"";
-    position:absolute;
-    left:0;
-    right:0;
-    bottom:-9px;
-    height:1.5px;
-    background:var(--brown);
-}
-
-nav a:hover{color:var(--brown)}
-
-.nav-pill{
-    font-family:"Poppins",sans-serif !important;
-    font-size:.72rem !important;
-    font-weight:600;
-    padding:7px 14px;
-    border:1px solid var(--brown);
-    border-radius:20px;
-    color:var(--brown) !important;
-}
-
-.nav-pill:hover{background:var(--brown);color:#fff !important}
-
-.cart{
-    width:25px;
-    height:25px;
-    color:var(--brown);
-}
-
-.hero{
-    margin-top:64px;
-    min-height:342px;
-    position:relative;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    overflow:hidden;
-    background:
-        linear-gradient(rgba(239,221,199,.43),rgba(239,221,199,.43)),
-        url("https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&w=1800&q=90")
-        center/cover;
-}
-
-.hero::after{
-    content:"";
-    position:absolute;
-    inset:0;
-    background:radial-gradient(circle at 52% 48%,rgba(255,255,255,.24),transparent 58%);
-    pointer-events:none;
-}
-
-.hero-content{
-    position:relative;
-    z-index:2;
-    transform:translateY(3px);
-}
-
-.hero h1{
-    font-family:"Great Vibes",cursive;
-    font-weight:400;
-    font-size:clamp(4rem,7vw,6rem);
-    line-height:.95;
-    color:#81502f;
-    text-shadow:0 2px 5px rgba(255,255,255,.35);
-}
-
-.heart-line{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:10px;
-    color:var(--brown);
-    font-family:"Great Vibes",cursive;
-    font-size:2rem;
-    margin:3px 0 0;
-}
-
-.heart-line::before,.heart-line::after{
-    content:"";
-    width:78px;
-    height:1.5px;
-    background:var(--brown);
-}
-
-.hero p{
-    font-family:"Playfair Display",serif;
-    font-size:1.05rem;
-    line-height:1.35;
-    color:#382b22;
-    margin:2px 0 17px;
-}
-
-.hero-button,.order-button,.pay-button{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    gap:8px;
-    border:0;
-    background:var(--brown);
-    color:white;
-    border-radius:24px;
-    cursor:pointer;
-    transition:.25s;
-    box-shadow:0 3px 8px rgba(100,60,30,.12);
-}
-
-.hero-button{
-    padding:10px 25px;
-    font-size:.78rem;
-    font-weight:600;
-}
-
-.hero-button:hover,.order-button:hover,.pay-button:hover{
-    background:var(--brown-dark);
-    transform:translateY(-2px);
-}
-
-main{max-width:1000px;margin:auto;padding:0 30px}
-
-.about{
-    margin:0 -30px;
-    min-height:183px;
-    padding:25px 12%;
-    display:grid;
-    grid-template-columns:1fr 1.45fr;
-    gap:45px;
-    align-items:center;
-    background:#f8f1e9;
-    border-bottom:1px solid #eee1d4;
-}
-
-.about h2,.section-title{
-    font-family:"Playfair Display",serif;
-    color:#412d21;
-}
-
-.about h2{
-    font-size:1.55rem;
-    margin-bottom:8px;
-}
-
-.mini-heart{
-    color:var(--brown);
-    font-family:"Great Vibes",cursive;
-    font-size:1.35rem;
-    margin-top:-7px;
-    margin-bottom:2px;
-}
-
-.about p{
-    max-width:340px;
-    font-size:.78rem;
-    line-height:1.55;
-    color:#50443b;
-}
-
-.features{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-}
-
-.feature{
-    text-align:center;
-    min-height:74px;
-    padding:7px 16px;
-    border-right:1px solid #dfd0c0;
-}
-
-.feature:last-child{border-right:0}
-
-.feature-icon{
-    width:32px;
-    height:32px;
-    margin:0 auto 7px;
-    color:var(--brown);
-}
-
-.feature-title{
-    font-family:"Playfair Display",serif;
-    font-size:.78rem;
-    line-height:1.3;
-}
-
-.section-title{
-    text-align:center;
-    font-size:1.65rem;
-    margin:16px 0 7px;
-}
-
-.section-title::after{
-    content:"♡";
-    display:block;
-    color:var(--brown);
-    font-family:"Great Vibes",cursive;
-    font-size:1.4rem;
-    line-height:20px;
-}
-
-.collection{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
-    gap:17px;
-    margin-top:0;
-}
-
-.card{
-    overflow:hidden;
-    background:rgba(255,253,249,.9);
-    border:1px solid var(--line);
-    border-radius:5px;
-    box-shadow:0 2px 9px rgba(100,70,45,.045);
-    transition:.3s;
-}
-
-.card:hover{
-    transform:translateY(-4px);
-    box-shadow:0 12px 25px rgba(100,70,45,.12);
-}
-
-.product-image{
-    width:100%;
-    height:174px;
-    background-position:center;
-    background-size:cover;
-}
-
-.mirror{
-    background-image:url("https://images.pexels.com/photos/18915435/pexels-photo-18915435.jpeg?auto=compress&cs=tinysrgb&w=1000");
-}
-
-.keychain{
-    background-image:url("https://images.pexels.com/photos/5371357/pexels-photo-5371357.jpeg?auto=compress&cs=tinysrgb&w=1000");
-}
-
-.bag{
-    background-image:url("https://images.pexels.com/photos/6119785/pexels-photo-6119785.jpeg?auto=compress&cs=tinysrgb&w=1000");
-}
-
-.chandelier{
-    background-image:url("https://images.pexels.com/photos/8503256/pexels-photo-8503256.jpeg?auto=compress&cs=tinysrgb&w=1000");
-}
-
-.card-content{
-    padding:8px 13px 12px;
-    text-align:center;
-}
-
-.card h3{
-    font-family:"Playfair Display",serif;
-    font-size:.98rem;
-    color:#4b3020;
-    margin-bottom:4px;
-}
-
-.card p{
-    min-height:31px;
-    font-size:.68rem;
-    line-height:1.35;
-    color:var(--muted);
-}
-
-.order-button{
-    margin-top:9px;
-    padding:8px 17px;
-    font-size:.68rem;
-    font-weight:600;
-}
-
-.bottom-grid{
-    display:grid;
-    grid-template-columns:1.35fr 1fr;
-    gap:45px;
-    margin-top:0;
-}
-
-.faq details{
-    background:#fffdf9;
-    border:1px solid var(--line);
-    border-radius:6px;
-    padding:9px 13px;
-    margin-bottom:6px;
-    cursor:pointer;
-}
-
-.faq summary{
-    list-style:none;
-    font-size:.68rem;
-    font-weight:600;
-    color:#513a29;
-}
-
-.faq summary::-webkit-details-marker{display:none}
-
-.faq summary::after{
-    content:"+";
-    float:right;
-    font-size:1.05rem;
-    color:var(--brown);
-    font-weight:400;
-}
-
-.faq details[open] summary::after{content:"−"}
-
-.faq p{
-    padding-top:6px;
-    font-size:.65rem;
-    color:var(--muted);
-    line-height:1.45;
-}
-
-.payment{text-align:center;padding-top:3px}
-
-.payment-description{
-    max-width:220px;
-    margin:0 auto 14px;
-    font-size:.68rem;
-    line-height:1.45;
-    color:var(--muted);
-}
-
-.pay-button{
-    padding:10px 28px;
-    font-size:.72rem;
-    font-weight:600;
-}
-
-.payment-methods{
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    gap:18px;
-    margin-top:17px;
-    font-size:.72rem;
-    font-weight:700;
-}
-
-.paypal{color:#0070ba}
-.zelle{color:#6d1ed4}
-.cashapp{color:#19a849}
-
-footer{
-    position:relative;
-    margin-top:36px;
-    min-height:63px;
-    padding:17px 20px;
-    text-align:center;
-    color:white;
-    background:var(--footer);
-    font-size:.62rem;
-}
-
-.socials{
-    position:absolute;
-    right:10%;
-    top:19px;
-    display:flex;
-    gap:18px;
-    font-size:1rem;
-}
-
-.leaf-decoration{
-    position:absolute;
-    width:100px;
-    height:100px;
-    opacity:.55;
-    pointer-events:none;
-}
-
-.leaf-decoration.left{left:0;bottom:0}
-.leaf-decoration.right{right:0;bottom:0;transform:scaleX(-1)}
-
-.leaf-decoration span{
-    position:absolute;
-    width:42px;
-    height:15px;
-    border:1.5px solid #a8754e;
-    border-radius:100% 0 100% 0;
-    transform:rotate(-48deg);
-}
-
-.leaf-decoration span:nth-child(1){left:14px;bottom:28px}
-.leaf-decoration span:nth-child(2){left:30px;bottom:48px;transform:rotate(5deg)}
-.leaf-decoration span:nth-child(3){left:46px;bottom:65px;transform:rotate(-35deg)}
-.leaf-decoration span:nth-child(4){left:5px;bottom:12px;transform:rotate(8deg)}
-
-.modal{
-    position:fixed;
-    inset:0;
-    z-index:3000;
-    display:none;
-    align-items:center;
-    justify-content:center;
-    padding:20px;
-    background:rgba(40,25,15,.6);
-    backdrop-filter:blur(5px);
-}
-
-.modal.active{display:flex}
-
-.modal-box{
-    width:100%;
-    max-width:430px;
-    max-height:90vh;
-    overflow-y:auto;
-    position:relative;
-    padding:28px;
-    background:#fffdf9;
-    border-radius:15px;
-    box-shadow:0 25px 70px rgba(0,0,0,.3);
-}
-
-.close{
-    position:absolute;
-    top:10px;
-    right:17px;
-    border:0;
-    background:none;
-    color:#8b7768;
-    font-size:28px;
-    cursor:pointer;
-}
-
-.modal-box h2{
-    font-family:"Playfair Display",serif;
-    color:var(--brown-dark);
-    margin-bottom:17px;
-}
-
-.form-group{margin-bottom:14px}
-
-.form-group label{
-    display:block;
-    margin-bottom:5px;
-    font-size:.78rem;
-    font-weight:600;
-}
-
-.form-group input,.form-group select,.form-group textarea{
-    width:100%;
-    border:1px solid #ddcdbd;
-    border-radius:7px;
-    padding:10px;
-    background:white;
-    font-family:inherit;
-    outline:none;
-}
-
-.form-group input:focus,.form-group select:focus,.form-group textarea:focus{
-    border-color:var(--brown);
-}
-
-.form-group textarea{resize:vertical}
-
-.full-button{
-    width:100%;
-    padding:12px;
-    border:0;
-    border-radius:8px;
-    background:var(--brown);
-    color:white;
-    font-weight:600;
-    cursor:pointer;
-}
-
-.success{text-align:center}
-
-.success-icon{
-    width:65px;
-    height:65px;
-    margin:0 auto 15px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    border-radius:50%;
-    background:#eee2d4;
-    color:var(--brown);
-    font-size:2rem;
-}
-
-.order-summary{
-    margin:18px 0;
-    padding:15px;
-    border-radius:9px;
-    background:#f7efe6;
-    text-align:left;
-    font-size:.8rem;
-    line-height:1.8;
-}
-
-.payment-note{
-    margin-top:14px;
-    font-size:.68rem;
-    color:#8a7c70;
-    text-align:center;
-}
-
-.checkout-box{max-width:470px}
-.checkout-subtitle{font-size:.72rem;line-height:1.45;color:var(--muted);margin:-8px 0 17px}
-.checkout-total{margin:5px 0 18px;padding:12px 14px;border-radius:8px;background:#f7efe6;color:var(--brown-dark);font-family:"Playfair Display",serif;font-size:1rem;font-weight:700;text-align:right}
-.payment-heading{font-family:"Playfair Display",serif;color:var(--brown-dark);font-size:1rem;margin-bottom:9px}
-
-.method-tabs{display:flex;gap:8px;margin-bottom:14px}
-.method-tab{flex:1;padding:9px 4px;text-align:center;font-size:.68rem;font-weight:700;border:1px solid #ddcdbd;border-radius:8px;background:#fff;cursor:pointer;color:var(--muted)}
-.method-tab.active{border-color:var(--brown);color:var(--brown);background:#f7eee4}
-.method-panel{display:none}
-.method-panel.active{display:block}
-.instructions-box{background:#f7efe6;border-radius:8px;padding:12px 14px;font-size:.75rem;line-height:1.6;margin-bottom:12px}
-.instructions-box b{color:var(--brown-dark)}
-
-.auth-tabs{display:flex;gap:6px;margin-bottom:16px}
-.auth-tab{flex:1;padding:8px;text-align:center;font-size:.72rem;font-weight:700;border:1px solid #ddcdbd;border-radius:8px;background:#fff;cursor:pointer;color:var(--muted)}
-.auth-tab.active{border-color:var(--brown);color:#fff;background:var(--brown)}
-.auth-panel{display:none}
-.auth-panel.active{display:block}
-.auth-error{color:#b5484f;font-size:.7rem;margin:-6px 0 10px;min-height:14px}
-
-.orders-list{display:flex;flex-direction:column;gap:10px}
-.order-card{border:1px solid var(--line);border-radius:9px;padding:12px 14px;font-size:.75rem;line-height:1.6;background:#fffdf9}
-.order-card .top-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
-.order-card h4{font-family:"Playfair Display",serif;color:#4b3020;font-size:.92rem}
-.status-pill{font-size:.62rem;font-weight:700;padding:3px 9px;border-radius:12px}
-.status-paid{background:#e2f3e6;color:#1f8a41}
-.status-pending_manual_verification{background:#fbedd6;color:#a86b1f}
-.status-pending{background:#eee;color:#888}
-.empty-note{text-align:center;color:var(--muted);font-size:.78rem;padding:10px 0}
-
-@media(max-width:800px){
-    header{
-        height:auto;
-        min-height:70px;
-        padding:7px 18px;
-        flex-direction:column;
-        gap:6px;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Knots By Neda - Handcrafted Macramé & Jewelry">
+  <title>Knots By Neda</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://www.paypal.com/sdk/js?client-id=YOUR_PAYPAL_CLIENT_ID"></script>
+
+  <style>
+    :root {
+      --cream: #fbf7f1;
+      --cream-2: #f6eee4;
+      --white: #fffdfa;
+      --brown: #a86b3f;
+      --brown-dark: #6d432b;
+      --brown-light: #c18a61;
+      --text: #49382c;
+      --muted: #75685d;
+      --line: #e7d9ca;
+      --footer: #cdb095;
+      --success: #2d7a3a;
+      --error: #c84a4a;
     }
 
-    .logo{font-size:1.9rem}
-    nav{gap:12px;flex-wrap:wrap;justify-content:center}
-    nav a{font-size:.68rem}
-    .cart{display:none}
-
-    .hero{
-        margin-top:82px;
-        min-height:390px;
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
-    .hero h1{font-size:4rem}
-    main{padding:0 15px}
-
-    .about{
-        margin:0 -15px;
-        padding:28px 20px;
-        grid-template-columns:1fr;
-        text-align:center;
-        gap:22px;
+    html {
+      scroll-behavior: smooth;
     }
 
-    .about p{margin:auto}
-    .features{grid-template-columns:repeat(3,1fr)}
-
-    .feature{padding:7px 5px}
-    .feature-title{font-size:.68rem}
-
-    .collection{grid-template-columns:1fr}
-    .product-image{height:230px}
-
-    .bottom-grid{
-        grid-template-columns:1fr;
-        gap:10px;
+    body {
+      font-family: "Poppins", Arial, sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      line-height: 1.6;
     }
 
-    .section-title{margin-top:32px}
-    .socials{position:static;margin-top:8px}
-    .method-tabs{flex-direction:column}
-}
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
 
-@media(max-width:450px){
-    nav{gap:8px}
-    nav a{font-size:.61rem}
-    .hero h1{font-size:3.5rem}
-    .features{gap:2px}
-}
-</style>
+    button {
+      font-family: inherit;
+    }
+
+    /* HEADER */
+    header {
+      height: 64px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 11.5%;
+      background: rgba(255, 253, 249, 0.96);
+      border-bottom: 1px solid #eadfd3;
+      backdrop-filter: blur(12px);
+    }
+
+    .logo {
+      font-family: "Great Vibes", cursive;
+      font-size: 2.05rem;
+      color: #603b26;
+      white-space: nowrap;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    nav a {
+      position: relative;
+      font-family: "Playfair Display", serif;
+      font-size: 0.86rem;
+      color: #382b23;
+      transition: color 0.2s;
+    }
+
+    nav a:first-child {
+      color: var(--brown);
+    }
+
+    nav a:first-child::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -9px;
+      height: 1.5px;
+      background: var(--brown);
+    }
+
+    nav a:hover {
+      color: var(--brown);
+    }
+
+    .nav-pill {
+      font-family: "Poppins", sans-serif !important;
+      font-size: 0.72rem !important;
+      font-weight: 600;
+      padding: 7px 14px;
+      border: 1px solid var(--brown);
+      border-radius: 20px;
+      color: var(--brown) !important;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .nav-pill:hover {
+      background: var(--brown);
+      color: #fff !important;
+    }
+
+    /* HERO */
+    .hero {
+      margin-top: 64px;
+      min-height: 380px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+      background: linear-gradient(rgba(239, 221, 199, 0.43), rgba(239, 221, 199, 0.43)),
+                  url("https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&w=1800&q=90") center/cover;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 52% 48%, rgba(255, 255, 255, 0.24), transparent 58%);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      transform: translateY(3px);
+    }
+
+    .hero h1 {
+      font-family: "Great Vibes", cursive;
+      font-weight: 400;
+      font-size: clamp(3.5rem, 7vw, 5.5rem);
+      line-height: 0.95;
+      color: #81502f;
+      text-shadow: 0 2px 5px rgba(255, 255, 255, 0.35);
+    }
+
+    .heart-line {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: var(--brown);
+      font-family: "Great Vibes", cursive;
+      font-size: 1.8rem;
+      margin: 8px 0 0;
+    }
+
+    .heart-line::before,
+    .heart-line::after {
+      content: "";
+      width: 78px;
+      height: 1.5px;
+      background: var(--brown);
+    }
+
+    .hero p {
+      font-family: "Playfair Display", serif;
+      font-size: 1.05rem;
+      line-height: 1.35;
+      color: #382b22;
+      margin: 8px 0 24px;
+    }
+
+    .hero-button,
+    .order-button,
+    .pay-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 0;
+      background: var(--brown);
+      color: white;
+      border-radius: 24px;
+      cursor: pointer;
+      transition: all 0.25s;
+      box-shadow: 0 3px 8px rgba(100, 60, 30, 0.12);
+      font-weight: 600;
+    }
+
+    .hero-button {
+      padding: 11px 28px;
+      font-size: 0.78rem;
+    }
+
+    .hero-button:hover,
+    .order-button:hover,
+    .pay-button:hover {
+      background: var(--brown-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 12px rgba(100, 60, 30, 0.2);
+    }
+
+    /* MAIN */
+    main {
+      max-width: 1000px;
+      margin: auto;
+      padding: 0 30px;
+    }
+
+    .about {
+      margin: 0 -30px;
+      min-height: 200px;
+      padding: 40px 12%;
+      display: grid;
+      grid-template-columns: 1fr 1.45fr;
+      gap: 45px;
+      align-items: center;
+      background: #f8f1e9;
+      border-bottom: 1px solid #eee1d4;
+    }
+
+    .about h2,
+    .section-title {
+      font-family: "Playfair Display", serif;
+      color: #412d21;
+      font-size: 1.75rem;
+      margin-bottom: 12px;
+    }
+
+    .mini-heart {
+      color: var(--brown);
+      font-family: "Great Vibes", cursive;
+      font-size: 1.35rem;
+      margin-top: -7px;
+      margin-bottom: 2px;
+    }
+
+    .about p {
+      max-width: 340px;
+      font-size: 0.85rem;
+      line-height: 1.65;
+      color: #50443b;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      margin: 50px 0;
+    }
+
+    .feature {
+      padding: 30px;
+      text-align: center;
+      border-right: 1px solid var(--line);
+    }
+
+    .feature:last-child {
+      border-right: none;
+    }
+
+    .feature-icon {
+      font-size: 2.2rem;
+      margin-bottom: 12px;
+    }
+
+    .feature h3 {
+      font-family: "Playfair Display", serif;
+      font-size: 1.1rem;
+      color: #412d21;
+      margin-bottom: 6px;
+    }
+
+    .feature p {
+      font-size: 0.75rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* PRODUCTS */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 30px;
+      margin: 60px 0;
+    }
+
+    .product-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      transition: all 0.3s;
+      box-shadow: 0 2px 4px rgba(100, 60, 30, 0.05);
+    }
+
+    .product-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 16px rgba(100, 60, 30, 0.12);
+    }
+
+    .product-image {
+      width: 100%;
+      height: 200px;
+      background: var(--cream-2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      overflow: hidden;
+    }
+
+    .product-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .product-info {
+      padding: 16px;
+    }
+
+    .product-title {
+      font-family: "Playfair Display", serif;
+      font-size: 1.05rem;
+      color: #412d21;
+      margin-bottom: 4px;
+    }
+
+    .product-price {
+      color: var(--brown);
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-bottom: 12px;
+    }
+
+    .product-desc {
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+
+    .order-button {
+      width: 100%;
+      padding: 10px 0;
+      font-size: 0.75rem;
+    }
+
+    /* MODALS */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      backdrop-filter: blur(4px);
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 16px;
+      max-width: 500px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: slideUp 0.3s ease-out;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .modal-header {
+      padding: 24px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-title {
+      font-family: "Playfair Display", serif;
+      font-size: 1.35rem;
+      color: #412d21;
+    }
+
+    .close-btn {
+      width: 28px;
+      height: 28px;
+      border: 0;
+      background: transparent;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+
+    .close-btn:hover {
+      color: var(--brown);
+    }
+
+    .modal-body {
+      padding: 24px;
+    }
+
+    /* AUTH */
+    .auth-tabs {
+      display: flex;
+      gap: 0;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 24px;
+    }
+
+    .auth-tab {
+      flex: 1;
+      padding: 12px;
+      text-align: center;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+      font-size: 0.85rem;
+      color: var(--muted);
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .auth-tab.active {
+      color: var(--brown);
+      border-bottom-color: var(--brown);
+    }
+
+    .auth-panel {
+      display: none;
+    }
+
+    .auth-panel.active {
+      display: block;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #412d21;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-family: inherit;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--brown);
+      box-shadow: 0 0 0 3px rgba(168, 107, 63, 0.1);
+    }
+
+    .error-msg {
+      color: var(--error);
+      font-size: 0.8rem;
+      margin-bottom: 16px;
+      padding: 10px;
+      background: rgba(200, 74, 74, 0.08);
+      border-radius: 6px;
+      display: none;
+    }
+
+    .error-msg.show {
+      display: block;
+    }
+
+    /* CHECKOUT */
+    .checkout-form {
+      display: grid;
+      gap: 16px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .method-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .method-tab {
+      flex: 1;
+      padding: 12px;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--muted);
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .method-tab.active {
+      color: var(--brown);
+      border-bottom-color: var(--brown);
+    }
+
+    .method-panel {
+      display: none;
+    }
+
+    .method-panel.active {
+      display: block;
+    }
+
+    .payment-info {
+      background: var(--cream);
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      font-size: 0.85rem;
+      line-height: 1.6;
+    }
+
+    .payment-info strong {
+      color: var(--brown);
+    }
+
+    .order-summary {
+      background: var(--cream-2);
+      padding: 16px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      margin-bottom: 20px;
+      border-left: 3px solid var(--brown);
+    }
+
+    .total-display {
+      text-align: right;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--brown);
+      margin-bottom: 20px;
+    }
+
+    #paypal-button-container {
+      margin-bottom: 16px;
+    }
+
+    .reference-input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-family: monospace;
+      margin-bottom: 16px;
+    }
+
+    .reference-input::placeholder {
+      color: var(--muted);
+    }
+
+    /* SUCCESS */
+    .success-icon {
+      width: 60px;
+      height: 60px;
+      background: rgba(45, 122, 58, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      margin: 0 auto 16px;
+    }
+
+    .success-title {
+      font-family: "Playfair Display", serif;
+      font-size: 1.35rem;
+      color: var(--success);
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .success-subtitle {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+
+    .order-card {
+      background: var(--cream);
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+    }
+
+    .order-card h4 {
+      font-size: 0.95rem;
+      color: #412d21;
+      margin-bottom: 8px;
+    }
+
+    .order-card > div {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .status-pill {
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 12px;
+    }
+
+    .status-paid {
+      background: rgba(45, 122, 58, 0.1);
+      color: var(--success);
+    }
+
+    .status-pending_manual_verification,
+    .status-pending {
+      background: rgba(200, 74, 74, 0.1);
+      color: var(--error);
+    }
+
+    .empty-note {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.9rem;
+      padding: 20px;
+    }
+
+    /* FOOTER */
+    footer {
+      margin-top: 80px;
+      padding: 50px 30px;
+      background: var(--footer);
+      text-align: center;
+      color: white;
+      font-size: 0.85rem;
+    }
+
+    footer p {
+      margin-bottom: 12px;
+    }
+
+    footer a {
+      color: white;
+      text-decoration: underline;
+      transition: opacity 0.2s;
+    }
+
+    footer a:hover {
+      opacity: 0.8;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      header {
+        padding: 0 20px;
+      }
+
+      nav {
+        gap: 16px;
+      }
+
+      .hero {
+        min-height: 300px;
+      }
+
+      .about {
+        grid-template-columns: 1fr;
+        gap: 24px;
+        padding: 30px 20px;
+      }
+
+      .features {
+        grid-template-columns: 1fr;
+      }
+
+      .feature {
+        border-right: none;
+        border-bottom: 1px solid var(--line);
+        padding: 20px;
+      }
+
+      .feature:last-child {
+        border-bottom: none;
+      }
+
+      .products-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      main {
+        padding: 0 20px;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .modal-content {
+        max-width: 100%;
+        border-radius: 12px;
+      }
+    }
+  </style>
 </head>
 <body>
 
 <header>
-    <a href="#home" class="logo">Knots By Neda ♡</a>
-
-    <nav>
-        <a href="#home">Home</a>
-        <a href="#about">About Me</a>
-        <a href="#faq">FAQ</a>
-        <a href="#collection">Collection</a>
-        <a href="#" class="nav-pill" onclick="openMyOrders();return false;">My Orders</a>
-        <a href="#" class="nav-pill" id="authNavLink" onclick="handleAuthNavClick();return false;">Login</a>
-    </nav>
-
-    <svg class="cart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-        <path d="M6 8h12l1 12H5L6 8Z"/>
-        <path d="M9 8V6a3 3 0 0 1 6 0v2"/>
-    </svg>
+  <div class="logo">Knots By Neda</div>
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#products">Shop</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+    <button class="nav-pill" onclick="window.openMyOrders()">My Orders</button>
+    <button class="nav-pill" onclick="window.toggleAuth()">Login</button>
+  </nav>
 </header>
 
 <section class="hero" id="home">
-    <div class="hero-content">
-        <h1>Knots By Neda</h1>
+  <div class="hero-content">
+    <h1>Knots By Neda</h1>
+    <div class="heart-line">✨</div>
+    <p>Handcrafted macramé, jewelry & textile art</p>
+    <button class="hero-button" onclick="document.getElementById('products').scrollIntoView({ behavior: 'smooth' })">Shop Now</button>
+  </div>
+</section>
 
-        <div class="heart-line">♡</div>
-
-        <p>Handmade with love,<br>one knot at a time.</p>
-
-        <a class="hero-button" href="#collection">
-            Explore Collection <span>→</span>
-        </a>
-    </div>
+<section class="about">
+  <div>
+    <h2>About Neda</h2>
+    <div class="mini-heart">💚</div>
+    <p>Every piece is handmade with intention and love. I use sustainable materials and techniques passed down through generations. Each creation is unique—just like you.</p>
+  </div>
+  <div>
+    <p>Macramé isn't just a craft; it's a meditation. Every knot tells a story. Whether you're looking for wall art, plant hangers, jewelry, or a one-of-a-kind gift, I create pieces that transform spaces and touch hearts.</p>
+    <p style="margin-top: 16px;">All orders are made to order, allowing for customization in colors, sizes, and styles. Let's create something beautiful together.</p>
+  </div>
 </section>
 
 <main>
-
-<section id="about">
-    <div class="about">
-        <div>
-            <h2>About Me</h2>
-            <div class="mini-heart">♡</div>
-            <p>
-                Hi! I'm Neda — a fiber artist who loves creating
-                handmade macrame pieces that bring warmth,
-                texture, and personality into your home.
-                Every item is crafted with care, patience,
-                and creativity.
-            </p>
-        </div>
-
-        <div class="features">
-            <div class="feature">
-                <svg class="feature-icon" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <path d="M20 31c-4-5-10-7-9-15 1-6 8-8 12-3 4-5 11-3 11 3 0 8-8 10-14 15Z"/>
-                    <path d="M11 15c4 0 7-3 8-7"/>
-                </svg>
-                <div class="feature-title">Handmade<br>with Love</div>
-            </div>
-
-            <div class="feature">
-                <svg class="feature-icon" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <path d="M20 33S7 25 7 15c0-5 4-8 8-8 3 0 5 2 5 5 0-3 2-5 5-5 4 0 8 3 8 8 0 10-13 18-13 18Z"/>
-                </svg>
-                <div class="feature-title">Unique<br>Designs</div>
-            </div>
-
-            <div class="feature">
-                <svg class="feature-icon" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <path d="M7 18 20 7l13 11"/>
-                    <path d="M10 17v15h20V17"/>
-                    <path d="M16 32V22h8v10"/>
-                </svg>
-                <div class="feature-title">Brings Warmth<br>to Your Home</div>
-            </div>
-        </div>
+  <div class="features">
+    <div class="feature">
+      <div class="feature-icon">🎨</div>
+      <h3>Custom Colors</h3>
+      <p>Choose from a palette of natural dyes or request your own color combination</p>
     </div>
-</section>
-
-<section id="collection">
-    <h2 class="section-title">The Collection</h2>
-
-    <div class="collection">
-
-        <article class="card">
-            <div class="product-image mirror"></div>
-            <div class="card-content">
-                <h3>Macrame Mirror</h3>
-                <p>Elegant woven details that add<br>a cozy touch to any room.</p>
-                <button class="order-button" onclick="openOrder('Macrame Mirror',45)">
-                    Customize &amp; Order →
-                </button>
-            </div>
-        </article>
-
-        <article class="card">
-            <div class="product-image keychain"></div>
-            <div class="card-content">
-                <h3>Macrame Keychains</h3>
-                <p>Sweet little handmade knots<br>for keys, bags, and gifts.</p>
-                <button class="order-button" onclick="openOrder('Macrame Keychains',15)">
-                    Customize &amp; Order →
-                </button>
-            </div>
-        </article>
-
-        <article class="card">
-            <div class="product-image bag"></div>
-            <div class="card-content">
-                <h3>Handmade Handbag</h3>
-                <p>A stylish fiber bag made with<br>unique handmade details.</p>
-                <button class="order-button" onclick="openOrder('Handmade Handbag',55)">
-                    Customize &amp; Order →
-                </button>
-            </div>
-        </article>
-
-        <article class="card">
-            <div class="product-image chandelier"></div>
-            <div class="card-content">
-                <h3>Macrame Chandeliers</h3>
-                <p>Statement hanging light covers<br>woven with intricate detail.</p>
-                <button class="order-button" onclick="openOrder('Macrame Chandeliers',70)">
-                    Customize &amp; Order →
-                </button>
-            </div>
-        </article>
-
+    <div class="feature">
+      <div class="feature-icon">♻️</div>
+      <h3>Sustainable</h3>
+      <p>Ethically sourced materials and eco-conscious production methods</p>
     </div>
-</section>
-
-<div class="bottom-grid">
-
-<section id="faq">
-    <h2 class="section-title">FAQ</h2>
-
-    <div class="faq">
-        <details>
-            <summary>Do you take custom orders?</summary>
-            <p>Yes! You can request custom colors, sizes, and styles.</p>
-        </details>
-
-        <details>
-            <summary>How long does an order take?</summary>
-            <p>Most pieces take 3–7 days depending on size and complexity.</p>
-        </details>
-
-        <details>
-            <summary>Do you ship?</summary>
-            <p>Yes, worldwide shipping is available.</p>
-        </details>
-
-        <details>
-            <summary>How does payment work?</summary>
-            <p>Orders are placed after you sign in, so you can always see their status in "My Orders." PayPal is confirmed instantly. Zelle and CashApp are confirmed by hand once Neda sees the payment land — usually within a day.</p>
-        </details>
+    <div class="feature">
+      <div class="feature-icon">✋</div>
+      <h3>Handmade</h3>
+      <p>Every knot tied by hand with attention to detail and quality</p>
     </div>
-</section>
+  </div>
 
-<section id="payment">
-    <h2 class="section-title">Payment</h2>
-
-    <div class="payment">
-        <p class="payment-description">
-            Pick any item above to customize it and pay —
-            an order is only created once payment is
-            completed or submitted for verification.
-        </p>
-
-        <div class="payment-methods">
-            <span class="paypal">PayPal</span>
-            <span class="zelle">Zelle</span>
-            <span class="cashapp">● CashApp</span>
-        </div>
-    </div>
-</section>
-
-</div>
+  <section id="products">
+    <h2 class="section-title">Featured Collection</h2>
+    <div class="products-grid" id="productsGrid"></div>
+  </section>
 </main>
-
-<footer>
-    © <span id="year"></span> Knots By Neda
-    &nbsp; | &nbsp; Handmade with care ♡
-
-    <div class="socials">
-        ◎ &nbsp; ♡ &nbsp; ♪
-    </div>
-
-    <div class="leaf-decoration left">
-        <span></span><span></span><span></span><span></span>
-    </div>
-    <div class="leaf-decoration right">
-        <span></span><span></span><span></span><span></span>
-    </div>
-</footer>
 
 <!-- AUTH MODAL -->
 <div class="modal" id="authModal">
-    <div class="modal-box">
-        <button class="close" onclick="closeModal('authModal')">×</button>
-        <h2>Welcome</h2>
-
-        <div class="auth-tabs">
-            <div class="auth-tab active" id="tabLogin" onclick="switchAuthTab('login')">Log In</div>
-            <div class="auth-tab" id="tabSignup" onclick="switchAuthTab('signup')">Sign Up</div>
-        </div>
-
-        <div class="auth-error" id="authError"></div>
-
-        <div class="auth-panel active" id="panelLogin">
-            <div class="form-group">
-                <label>Email</label>
-                <input id="loginEmail" type="email" placeholder="you@example.com">
-            </div>
-            <div class="form-group">
-                <label>Password</label>
-                <input id="loginPassword" type="password" placeholder="••••••••">
-            </div>
-            <button class="full-button" onclick="doLogin()">Log In</button>
-        </div>
-
-        <div class="auth-panel" id="panelSignup">
-            <div class="form-group">
-                <label>Your Name</label>
-                <input id="signupName" type="text" placeholder="Your full name">
-            </div>
-            <div class="form-group">
-                <label>Email</label>
-                <input id="signupEmail" type="email" placeholder="you@example.com">
-            </div>
-            <div class="form-group">
-                <label>Password</label>
-                <input id="signupPassword" type="password" placeholder="At least 6 characters">
-            </div>
-            <button class="full-button" onclick="doSignup()">Create Account</button>
-        </div>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 class="modal-title">Sign In / Create Account</h2>
+      <button class="close-btn" onclick="window.closeModal('authModal')">×</button>
     </div>
+    <div class="modal-body">
+      <div class="error-msg" id="authError"></div>
+
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tabLogin" onclick="window.switchAuthTab('login')">Login</button>
+        <button class="auth-tab" id="tabSignup" onclick="window.switchAuthTab('signup')">Sign Up</button>
+      </div>
+
+      <div class="auth-panel active" id="panelLogin">
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="loginEmail" placeholder="you@example.com">
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="loginPassword" placeholder="••••••••">
+        </div>
+        <button class="hero-button" style="width: 100%; margin-top: 12px;" onclick="window.doLogin()">Sign In</button>
+      </div>
+
+      <div class="auth-panel" id="panelSignup">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="signupName" placeholder="Your Name">
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="signupEmail" placeholder="you@example.com">
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="signupPassword" placeholder="Min. 6 characters">
+        </div>
+        <button class="hero-button" style="width: 100%; margin-top: 12px;" onclick="window.doSignup()">Create Account</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CHECKOUT MODAL -->
+<div class="modal" id="orderModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 class="modal-title">Checkout — <span id="productTitle">Item</span></h2>
+      <button class="close-btn" onclick="window.closeModal('orderModal')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="error-msg" id="checkoutError"></div>
+
+      <div class="checkout-form">
+        <div class="form-group">
+          <label>Name</label>
+          <input type="text" id="customerName" placeholder="Your full name">
+        </div>
+
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="customerEmail" placeholder="your@email.com">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Color</label>
+            <select id="color">
+              <option>Natural</option>
+              <option>White</option>
+              <option>Cream</option>
+              <option>Blush</option>
+              <option>Sage</option>
+              <option>Terracotta</option>
+              <option>Custom</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Size</label>
+            <select id="size">
+              <option>Small</option>
+              <option>Medium</option>
+              <option>Large</option>
+              <option>Custom</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Quantity</label>
+          <input type="number" id="quantity" value="1" min="1" onchange="window.updateTotal()">
+        </div>
+
+        <div class="form-group">
+          <label>Special Requests (Optional)</label>
+          <textarea id="notes" placeholder="Color preferences, custom sizes, etc."></textarea>
+        </div>
+
+        <div class="order-summary">
+          <strong>Total:</strong> <span id="checkoutTotal">$0.00</span>
+        </div>
+
+        <div class="method-tabs">
+          <button class="method-tab active" onclick="window.switchMethod('paypal')">PayPal</button>
+          <button class="method-tab" onclick="window.switchMethod('zelle')">Zelle</button>
+          <button class="method-tab" onclick="window.switchMethod('cashapp')">CashApp</button>
+        </div>
+
+        <div class="method-panel active" id="panel-paypal">
+          <div id="paypal-button-container"></div>
+        </div>
+
+        <div class="method-panel" id="panel-zelle">
+          <div class="payment-info">
+            <strong>📱 Zelle Email:</strong><br>
+            <span id="zelleEmail">neda@example.com</span>
+          </div>
+          <div class="form-group">
+            <label>Zelle Confirmation Number</label>
+            <input type="text" id="zelleReference" class="reference-input" placeholder="e.g., ZEL-12345678">
+          </div>
+          <button class="hero-button" style="width: 100%;" onclick="window.submitManualOrder('zelle')">Submit Payment</button>
+        </div>
+
+        <div class="method-panel" id="panel-cashapp">
+          <div class="payment-info">
+            <strong>💵 CashApp Tag:</strong><br>
+            <span id="cashappTag">$NedaArt</span>
+          </div>
+          <div class="form-group">
+            <label>CashApp Confirmation Number</label>
+            <input type="text" id="cashappReference" class="reference-input" placeholder="e.g., cash-12345678">
+          </div>
+          <button class="hero-button" style="width: 100%;" onclick="window.submitManualOrder('cashapp')">Submit Payment</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SUCCESS MODAL -->
+<div class="modal" id="successModal">
+  <div class="modal-content">
+    <div class="modal-body" style="text-align: center;">
+      <div class="success-icon">✓</div>
+      <h2 class="success-title" id="successTitle">Payment Confirmed!</h2>
+      <p class="success-subtitle" id="successSubtitle">Your order is on its way!</p>
+      <div id="orderSummary" class="order-summary" style="text-align: left; margin-bottom: 24px;"></div>
+      <button class="hero-button" onclick="window.closeModal('successModal')" style="width: 100%;">Done</button>
+    </div>
+  </div>
 </div>
 
 <!-- MY ORDERS MODAL -->
 <div class="modal" id="myOrdersModal">
-    <div class="modal-box">
-        <button class="close" onclick="closeModal('myOrdersModal')">×</button>
-        <h2>My Orders</h2>
-        <div class="orders-list" id="ordersList">
-            <p class="empty-note">Loading…</p>
-        </div>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 class="modal-title">My Orders</h2>
+      <button class="close-btn" onclick="window.closeModal('myOrdersModal')">×</button>
     </div>
+    <div class="modal-body">
+      <div id="ordersList">
+        <p class="empty-note">Loading...</p>
+      </div>
+    </div>
+  </div>
 </div>
 
-<!-- ORDER + PAYMENT CHECKOUT -->
-<div class="modal" id="orderModal">
-    <div class="modal-box checkout-box">
-        <button class="close" onclick="closeModal('orderModal')">×</button>
-        <h2 id="productTitle">Customize Your Order</h2>
-        <p class="checkout-subtitle">Enter your order details, then complete payment. Your order is only created after payment or a payment reference is submitted.</p>
+<footer>
+  <p>&copy; 2024 Knots By Neda. All rights reserved.</p>
+  <p>Handcrafted with love in the USA 🧵</p>
+</footer>
 
-        <div class="form-group">
-            <label>Your Name</label>
-            <input id="customerName" type="text" placeholder="Your full name" required>
-        </div>
+<script>
+  const CONFIG = {
+    SUPABASE_URL: "https://YOUR-PROJECT.supabase.co",
+    SUPABASE_ANON_KEY: "YOUR_SUPABASE_ANON_KEY",
+    PAYPAL_CLIENT_ID: "YOUR_PAYPAL_CLIENT_ID",
+    ZELLE_EMAIL: "neda@example.com",
+    CASHAPP_TAG: "$NedaArt"
+  };
 
-        <div class="form-group">
-            <label>Your Email</label>
-            <input id="customerEmail" type="email" placeholder="you@example.com" required>
-        </div>
+  document.getElementById('zelleEmail').textContent = CONFIG.ZELLE_EMAIL;
+  document.getElementById('cashappTag').textContent = CONFIG.CASHAPP_TAG;
 
-        <div class="form-group">
-            <label>Color</label>
-            <select id="color">
-                <option>Natural Beige</option><option>White</option><option>Brown</option>
-                <option>Black</option><option>Custom Color</option>
-            </select>
-        </div>
+  const { createClient } = window.supabase;
+  const supabase = createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
 
-        <div class="form-group">
-            <label>Size</label>
-            <select id="size">
-                <option>Small</option><option selected>Medium</option><option>Large</option>
-            </select>
-        </div>
+  let currentUser = null;
+  let currentSession = null;
+  let selectedProduct = null;
+  let selectedPrice = null;
+  let paypalButtonsRendered = false;
 
-        <div class="form-group">
-            <label>Quantity</label>
-            <select id="quantity" onchange="updateTotal()">
-                <option>1</option><option>2</option><option>3</option><option>4</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label>Additional Notes</label>
-            <textarea id="notes" rows="3" placeholder="Tell me about your customization..."></textarea>
-        </div>
-
-        <div class="checkout-total" id="checkoutTotal">$45.00</div>
-
-        <h3 class="payment-heading">Choose Payment</h3>
-        <div class="method-tabs">
-            <div class="method-tab active" onclick="switchMethod('paypal')">PayPal</div>
-            <div class="method-tab" onclick="switchMethod('zelle')">Zelle</div>
-            <div class="method-tab" onclick="switchMethod('cashapp')">CashApp</div>
-        </div>
-
-        <div class="method-panel active" id="panel-paypal">
-            <p class="payment-note" style="margin-top:0">You'll be asked to log in and approve payment with PayPal. The order is only saved after PayPal confirms it went through.</p>
-            <div id="paypal-button-container"></div>
-        </div>
-
-        <div class="method-panel" id="panel-zelle">
-            <div class="instructions-box">
-                Send the total shown above via Zelle to <b id="zelleInfoText">—</b>, then enter the confirmation/reference number Zelle gave you below. Your order will show as <b>Pending Verification</b> until Neda confirms she received it.
-            </div>
-            <div class="form-group">
-                <label>Zelle confirmation number</label>
-                <input id="zelleReference" type="text" placeholder="e.g. Zelle confirmation #ABC123">
-            </div>
-            <button class="full-button" onclick="submitManualOrder('zelle')">Submit Zelle Order</button>
-        </div>
-
-        <div class="method-panel" id="panel-cashapp">
-            <div class="instructions-box">
-                Send the total shown above via CashApp to <b id="cashappInfoText">—</b>, then enter the transaction ID below. Your order will show as <b>Pending Verification</b> until Neda confirms she received it.
-            </div>
-            <div class="form-group">
-                <label>CashApp transaction ID</label>
-                <input id="cashappReference" type="text" placeholder="e.g. transaction ID from the app">
-            </div>
-            <button class="full-button" onclick="submitManualOrder('cashapp')">Submit CashApp Order</button>
-        </div>
-
-        <p class="payment-note" id="checkoutError"></p>
-    </div>
-</div>
-
-<!-- ORDER SENT -->
-<div class="modal" id="successModal">
-    <div class="modal-box success">
-        <button class="close" onclick="closeModal('successModal')">×</button>
-        <div class="success-icon">✓</div>
-        <h2 id="successTitle">Order Sent!</h2>
-        <p id="successSubtitle">Your order details have been sent to Knots By Neda.</p>
-        <div class="order-summary" id="orderSummary"></div>
-        <button class="full-button" onclick="closeAllModals()">Done</button>
-    </div>
-</div>
-
-<script src="https://www.paypal.com/sdk/js" id="paypal-sdk"></script>
-<script type="module">
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-
-const cfg = window.APP_CONFIG;
-const supabase = createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY);
-
-let selectedProduct = "";
-let selectedPrice = 0;
-let currentUser = null;
-let currentSession = null;
-let paypalButtonsRendered = false;
-
-document.getElementById("year").textContent = new Date().getFullYear();
-document.getElementById("zelleInfoText").textContent = cfg.ZELLE_INFO;
-document.getElementById("cashappInfoText").textContent = cfg.CASHAPP_INFO;
-
-const ppScript = document.getElementById('paypal-sdk');
-ppScript.src = `https://www.paypal.com/sdk/js?client-id=${encodeURIComponent(cfg.PAYPAL_CLIENT_ID)}&currency=USD`;
-
-async function refreshSession(){
-    const { data } = await supabase.auth.getSession();
-    currentSession = data.session;
-    currentUser = data.session ? data.session.user : null;
-    document.getElementById('authNavLink').textContent = currentUser ? 'Log Out' : 'Login';
-}
-await refreshSession();
-
-supabase.auth.onAuthStateChange((_event, session) => {
+  supabase.auth.onAuthStateChange((event, session) => {
     currentSession = session;
-    currentUser = session ? session.user : null;
-    document.getElementById('authNavLink').textContent = currentUser ? 'Log Out' : 'Login';
-});
+    currentUser = session?.user || null;
+    updateAuthButton();
+  });
 
-window.handleAuthNavClick = function(){
-    if(currentUser){
-        supabase.auth.signOut();
+  function updateAuthButton() {
+    const btn = document.querySelector('.nav-pill');
+    btn.textContent = currentUser ? '👤 Logout' : 'Login';
+  }
+
+  const PRODUCTS = [
+    { id: 1, name: "Wall Hanging", price: 45.00, desc: "Beautiful macramé wall art perfect for any room" },
+    { id: 2, name: "Plant Hanger", price: 35.00, desc: "Stylish holder for your favorite plants" },
+    { id: 3, name: "Boho Bracelet", price: 22.00, desc: "Wearable art with natural materials" },
+    { id: 4, name: "Dreamcatcher", price: 55.00, desc: "Spiritual handmade dreamcatcher" },
+    { id: 5, name: "Curtain Panel", price: 75.00, desc: "Large statement macramé curtain" },
+    { id: 6, name: "Pendant Necklace", price: 28.00, desc: "Delicate knotted pendant on chain" }
+  ];
+
+  function renderProducts() {
+    const grid = document.getElementById('productsGrid');
+    grid.innerHTML = PRODUCTS.map(p => `
+      <div class="product-card">
+        <div class="product-image">🧵</div>
+        <div class="product-info">
+          <div class="product-title">${p.name}</div>
+          <div class="product-price">$${p.price.toFixed(2)}</div>
+          <div class="product-desc">${p.desc}</div>
+          <button class="order-button" onclick="window.openOrder('${p.name}', ${p.price})">Order Now</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  renderProducts();
+
+  window.closeModal = function(id) {
+    document.getElementById(id).classList.remove('active');
+  };
+
+  window.closeAllModals = function() {
+    document.querySelectorAll('.modal').forEach(m => m.classList.remove('active'));
+  };
+
+  document.querySelectorAll('.modal').forEach(modal => {
+    modal.addEventListener('click', e => {
+      if (e.target === modal) modal.classList.remove('active');
+    });
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeAllModals();
+  });
+
+  window.toggleAuth = function() {
+    if (currentUser) {
+      supabase.auth.signOut();
     } else {
-        document.getElementById('authModal').classList.add('active');
+      document.getElementById('authModal').classList.add('active');
     }
-};
+  };
 
-window.switchAuthTab = function(tab){
+  window.switchAuthTab = function(tab) {
     document.getElementById('tabLogin').classList.toggle('active', tab === 'login');
     document.getElementById('tabSignup').classList.toggle('active', tab === 'signup');
     document.getElementById('panelLogin').classList.toggle('active', tab === 'login');
     document.getElementById('panelSignup').classList.toggle('active', tab === 'signup');
-    document.getElementById('authError').textContent = '';
-};
+    clearAuthError();
+  };
 
-window.doLogin = async function(){
+  function setAuthError(msg) {
+    const err = document.getElementById('authError');
+    err.textContent = msg;
+    err.classList.add('show');
+  }
+
+  function clearAuthError() {
+    document.getElementById('authError').classList.remove('show');
+  }
+
+  window.doLogin = async function() {
+    clearAuthError();
     const email = document.getElementById('loginEmail').value.trim();
     const password = document.getElementById('loginPassword').value;
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if(error){ document.getElementById('authError').textContent = error.message; return; }
-    document.getElementById('authError').textContent = '';
-    closeModal('authModal');
-};
 
-window.doSignup = async function(){
+    if (!email || !password) {
+      setAuthError('Please enter your email and password.');
+      return;
+    }
+
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) {
+      setAuthError(error.message);
+      return;
+    }
+    closeModal('authModal');
+  };
+
+  window.doSignup = async function() {
+    clearAuthError();
     const name = document.getElementById('signupName').value.trim();
     const email = document.getElementById('signupEmail').value.trim();
     const password = document.getElementById('signupPassword').value;
-    if(!name || !email || password.length < 6){
-        document.getElementById('authError').textContent = 'Please fill in every field (password 6+ characters).';
-        return;
-    }
-    const { error } = await supabase.auth.signUp({
-        email, password, options: { data: { full_name: name } }
-    });
-    if(error){ document.getElementById('authError').textContent = error.message; return; }
-    document.getElementById('authError').textContent = '';
-    alert('Account created! Check your email if confirmation is required, then log in.');
-    switchAuthTab('login');
-};
 
-window.openOrder = function(product, price){
+    if (!name || !email || password.length < 6) {
+      setAuthError('Fill all fields. Password must be 6+ characters.');
+      return;
+    }
+
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: { data: { full_name: name } }
+    });
+
+    if (error) {
+      setAuthError(error.message);
+      return;
+    }
+
+    alert('✓ Account created! Check your email to confirm, then log in.');
+    window.switchAuthTab('login');
+  };
+
+  window.openOrder = function(product, price) {
+    if (!currentUser) {
+      document.getElementById('authModal').classList.add('active');
+      return;
+    }
+
     selectedProduct = product;
     selectedPrice = price;
-    document.getElementById("productTitle").textContent = product;
-    document.getElementById("quantity").value = "1";
-    document.getElementById("checkoutError").textContent = '';
+    document.getElementById('productTitle').textContent = product;
+    document.getElementById('quantity').value = '1';
+    clearCheckoutError();
     updateTotal();
-    switchMethod('paypal');
-    document.getElementById("orderModal").classList.add("active");
-};
+    window.switchMethod('paypal');
+    document.getElementById('orderModal').classList.add('active');
+  };
 
-window.updateTotal = function(){
-    const qty = Number(document.getElementById("quantity").value);
-    document.getElementById("checkoutTotal").textContent = "$" + (selectedPrice * qty).toFixed(2);
+  window.updateTotal = function() {
+    const qty = Number(document.getElementById('quantity').value) || 1;
+    const total = selectedPrice * qty;
+    document.getElementById('checkoutTotal').textContent = '$' + total.toFixed(2);
     paypalButtonsRendered = false;
     renderPayPalButtons();
-};
+  };
 
-window.switchMethod = function(method){
+  window.switchMethod = function(method) {
     document.querySelectorAll('.method-tab').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.method-panel').forEach(p => p.classList.remove('active'));
-    document.querySelector(`.method-tab:nth-child(${method === 'paypal' ? 1 : method === 'zelle' ? 2 : 3})`).classList.add('active');
+
+    const tabIndex = method === 'paypal' ? 0 : method === 'zelle' ? 1 : 2;
+    document.querySelectorAll('.method-tab')[tabIndex].classList.add('active');
     document.getElementById('panel-' + method).classList.add('active');
-    if(method === 'paypal') renderPayPalButtons();
-};
 
-function getOrderFields(){
+    if (method === 'paypal') renderPayPalButtons();
+  };
+
+  function getOrderFields() {
     return {
-        product: selectedProduct,
-        color: document.getElementById('color').value,
-        size: document.getElementById('size').value,
-        quantity: Number(document.getElementById('quantity').value),
-        notes: document.getElementById('notes').value.trim(),
-        customerName: document.getElementById('customerName').value.trim(),
-        customerEmail: document.getElementById('customerEmail').value.trim(),
+      product: selectedProduct,
+      color: document.getElementById('color').value,
+      size: document.getElementById('size').value,
+      quantity: Number(document.getElementById('quantity').value),
+      notes: document.getElementById('notes').value.trim(),
+      customerName: document.getElementById('customerName').value.trim(),
+      customerEmail: document.getElementById('customerEmail').value.trim(),
     };
-}
+  }
 
-function validateBasics(){
+  function validateBasics() {
     const o = getOrderFields();
-    if(!currentUser){
-        document.getElementById('checkoutError').textContent = 'Please log in first — orders are tied to your account.';
-        document.getElementById('authModal').classList.add('active');
-        return null;
+    if (!o.customerName) {
+      setCheckoutError('Please enter your name.');
+      return null;
     }
-    if(!o.customerName || !o.customerEmail){
-        document.getElementById('checkoutError').textContent = 'Please enter your name and email.';
-        return null;
+    if (!o.customerEmail) {
+      setCheckoutError('Please enter your email.');
+      return null;
     }
-    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(o.customerEmail)){
-        document.getElementById('checkoutError').textContent = 'Please enter a valid email address.';
-        return null;
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(o.customerEmail)) {
+      setCheckoutError('Invalid email address.');
+      return null;
     }
-    document.getElementById('checkoutError').textContent = '';
+    clearCheckoutError();
     return o;
-}
+  }
 
-function renderPayPalButtons(){
-    if(!window.paypal || paypalButtonsRendered) return;
+  function setCheckoutError(msg) {
+    const err = document.getElementById('checkoutError');
+    err.textContent = msg;
+    err.classList.add('show');
+  }
+
+  function clearCheckoutError() {
+    document.getElementById('checkoutError').classList.remove('show');
+  }
+
+  function renderPayPalButtons() {
+    if (!window.paypal || paypalButtonsRendered) return;
+
     const container = document.getElementById('paypal-button-container');
     container.innerHTML = '';
     paypalButtonsRendered = true;
 
     window.paypal.Buttons({
-        createOrder: async () => {
-            const o = validateBasics();
-            if(!o) throw new Error('validation failed');
-            const res = await fetch('/.netlify/functions/paypal-create-order', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ product: o.product, quantity: o.quantity })
-            });
-            const data = await res.json();
-            if(!data.id) throw new Error(data.error || 'Could not start PayPal checkout');
-            return data.id;
-        },
-        onApprove: async (data) => {
-            const o = validateBasics();
-            if(!o) return;
-            const res = await fetch('/.netlify/functions/paypal-capture-order', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    paypalOrderId: data.orderID,
-                    accessToken: currentSession.access_token,
-                    order: o
-                })
-            });
-            const result = await res.json();
-            if(!res.ok || !result.success){
-                document.getElementById('checkoutError').textContent = result.error || 'Payment could not be confirmed.';
-                return;
-            }
-            showSuccess(o, 'PayPal', 'Paid', result.order.total);
-        },
-        onError: () => {
-            document.getElementById('checkoutError').textContent = 'PayPal ran into an error. Please try again.';
-        }
-    }).render('#paypal-button-container');
-}
+      createOrder: async () => {
+        const o = validateBasics();
+        if (!o) throw new Error('Validation failed');
 
-window.submitManualOrder = async function(method){
+        try {
+          const res = await fetch('/.netlify/functions/paypal-create-order', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              product: o.product,
+              quantity: o.quantity,
+              price: selectedPrice
+            })
+          });
+
+          const data = await res.json();
+          if (data.error) throw new Error(data.error);
+          return data.id;
+        } catch (err) {
+          setCheckoutError('Failed to start PayPal checkout: ' + err.message);
+          throw err;
+        }
+      },
+
+      onApprove: async (data) => {
+        const o = validateBasics();
+        if (!o) return;
+
+        try {
+          const res = await fetch('/.netlify/functions/paypal-capture-order', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              paypalOrderId: data.orderID,
+              accessToken: currentSession.access_token,
+              order: o,
+              total: selectedPrice * o.quantity
+            })
+          });
+
+          const result = await res.json();
+          if (!res.ok || !result.success) {
+            setCheckoutError(result.error || 'Payment confirmation failed.');
+            return;
+          }
+
+          showSuccess(o, 'PayPal', 'Paid', selectedPrice * o.quantity);
+        } catch (err) {
+          setCheckoutError('Error: ' + err.message);
+        }
+      },
+
+      onError: () => {
+        setCheckoutError('PayPal error. Please try again.');
+      }
+    }).render('#paypal-button-container');
+  }
+
+  window.submitManualOrder = async function(method) {
     const o = validateBasics();
-    if(!o) return;
-    const reference = document.getElementById(method === 'zelle' ? 'zelleReference' : 'cashappReference').value.trim();
-    if(!reference){
-        document.getElementById('checkoutError').textContent = 'Please enter your payment confirmation/reference first.';
-        return;
+    if (!o) return;
+
+    const refFieldId = method === 'zelle' ? 'zelleReference' : 'cashappReference';
+    const reference = document.getElementById(refFieldId).value.trim();
+
+    if (!reference) {
+      setCheckoutError('Please enter your payment confirmation number.');
+      return;
     }
-    const res = await fetch('/.netlify/functions/manual-submit', {
+
+    try {
+      const res = await fetch('/.netlify/functions/manual-submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-            accessToken: currentSession.access_token,
-            method, reference, order: o
+          accessToken: currentSession.access_token,
+          method,
+          reference,
+          order: o,
+          total: selectedPrice * o.quantity
         })
-    });
-    const result = await res.json();
-    if(!res.ok || !result.success){
-        document.getElementById('checkoutError').textContent = result.error || 'Could not submit order.';
-        return;
-    }
-    showSuccess(o, method === 'zelle' ? 'Zelle' : 'CashApp', 'Pending Verification', result.order.total);
-};
+      });
 
-function showSuccess(o, methodLabel, statusLabel, total){
-    document.getElementById('successTitle').textContent = statusLabel === 'Paid' ? 'Payment Confirmed!' : 'Order Submitted!';
-    document.getElementById('successSubtitle').textContent = statusLabel === 'Paid'
-        ? 'Your payment went through and Neda has been notified.'
-        : 'Neda will confirm your payment shortly — you can track its status in My Orders.';
+      const result = await res.json();
+      if (!res.ok || !result.success) {
+        setCheckoutError(result.error || 'Order submission failed.');
+        return;
+      }
+
+      const methodLabel = method === 'zelle' ? 'Zelle' : 'CashApp';
+      showSuccess(o, methodLabel, 'Pending Verification', selectedPrice * o.quantity);
+    } catch (err) {
+      setCheckoutError('Error: ' + err.message);
+    }
+  };
+
+  function showSuccess(o, methodLabel, statusLabel, total) {
+    document.getElementById('successTitle').textContent =
+      statusLabel === 'Paid' ? '✓ Payment Confirmed!' : '✓ Order Submitted!';
+    document.getElementById('successSubtitle').textContent =
+      statusLabel === 'Paid'
+        ? 'Your payment is complete. Neda will begin crafting your item!'
+        : 'Neda will verify your payment shortly.';
+
     document.getElementById('orderSummary').innerHTML = `
-        <strong>Item:</strong> ${escapeHtml(o.product)}<br>
-        <strong>Color:</strong> ${escapeHtml(o.color)}<br>
-        <strong>Size:</strong> ${escapeHtml(o.size)}<br>
-        <strong>Quantity:</strong> ${o.quantity}<br>
-        <strong>Payment:</strong> ${methodLabel} (${statusLabel})<br>
-        <strong>Total:</strong> $${Number(total).toFixed(2)}
+      <div><strong>Item:</strong> ${escapeHtml(o.product)}</div>
+      <div><strong>Color:</strong> ${escapeHtml(o.color)}</div>
+      <div><strong>Size:</strong> ${escapeHtml(o.size)}</div>
+      <div><strong>Quantity:</strong> ${o.quantity}</div>
+      <div><strong>Payment:</strong> ${methodLabel} (${statusLabel})</div>
+      <div style="margin-top: 8px; font-weight: 700; color: var(--brown);">
+        Total: $${Number(total).toFixed(2)}
+      </div>
     `;
+
     closeModal('orderModal');
     document.getElementById('successModal').classList.add('active');
-}
+  }
 
-function escapeHtml(text){
-    const div = document.createElement("div");
+  function escapeHtml(text) {
+    const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
-}
+  }
 
-window.openMyOrders = async function(){
-    if(!currentUser){
-        document.getElementById('authModal').classList.add('active');
-        return;
+  window.openMyOrders = async function() {
+    if (!currentUser) {
+      document.getElementById('authModal').classList.add('active');
+      return;
     }
+
     document.getElementById('myOrdersModal').classList.add('active');
     const list = document.getElementById('ordersList');
-    list.innerHTML = '<p class="empty-note">Loading…</p>';
+    list.innerHTML = '<p class="empty-note">Loading your orders...</p>';
 
-    const { data, error } = await supabase
+    try {
+      const { data, error } = await supabase
         .from('orders')
         .select('*')
         .order('created_at', { ascending: false });
 
-    if(error){
-        list.innerHTML = '<p class="empty-note">Could not load your orders.</p>';
-        return;
-    }
-    if(!data || data.length === 0){
-        list.innerHTML = '<p class="empty-note">You haven\'t placed an order yet.</p>';
-        return;
-    }
+      if (error) throw error;
 
-    const statusLabels = {
-        paid: 'Paid',
-        pending_manual_verification: 'Pending Verification',
-        pending: 'Pending'
-    };
+      if (!data || data.length === 0) {
+        list.innerHTML = '<p class="empty-note">No orders yet. Start shopping! 🛍️</p>';
+        return;
+      }
 
-    list.innerHTML = data.map(o => `
+      const statusLabels = {
+        'paid': 'Paid',
+        'pending_manual_verification': 'Pending Verification',
+        'pending': 'Pending'
+      };
+
+      list.innerHTML = data.map(o => `
         <div class="order-card">
-            <div class="top-row">
-                <h4>${escapeHtml(o.product)}</h4>
-                <span class="status-pill status-${o.status}">${statusLabels[o.status] || o.status}</span>
-            </div>
-            <div>${escapeHtml(o.color || '')} · ${escapeHtml(o.size || '')} · Qty ${o.quantity}</div>
-            <div>Payment: ${escapeHtml(o.payment_method)} — $${Number(o.total).toFixed(2)}</div>
-            <div style="color:var(--muted);font-size:.68rem;margin-top:3px">${new Date(o.created_at).toLocaleDateString()}</div>
+          <div class="top-row">
+            <h4>${escapeHtml(o.product)}</h4>
+            <span class="status-pill status-${o.status}">
+              ${statusLabels[o.status] || o.status}
+            </span>
+          </div>
+          <div>${escapeHtml(o.color || 'N/A')} · ${escapeHtml(o.size || 'N/A')} · Qty ${o.quantity}</div>
+          <div>Payment: ${escapeHtml(o.payment_method)} — $${Number(o.total).toFixed(2)}</div>
+          <div style="color: var(--muted); font-size: 0.75rem; margin-top: 6px;">
+            ${new Date(o.created_at).toLocaleDateString()}
+          </div>
         </div>
-    `).join('');
-};
-
-window.closeModal = function(id){
-    document.getElementById(id).classList.remove("active");
-};
-
-window.closeAllModals = function(){
-    document.querySelectorAll(".modal").forEach(modal => modal.classList.remove("active"));
-};
-
-document.querySelectorAll(".modal").forEach(modal => {
-    modal.addEventListener("click", function(event){
-        if(event.target === modal) modal.classList.remove("active");
-    });
-});
-
-document.addEventListener("keydown", function(event){
-    if(event.key === "Escape") closeAllModals();
-});
+      `).join('');
+    } catch (err) {
+      list.innerHTML = '<p class="empty-note">Failed to load orders. Please try again.</p>';
+      console.error(err);
+    }
+  };
 </script>
 
 </body>
 </html>
-
-
