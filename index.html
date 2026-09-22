@@ -1241,7 +1241,7 @@ window.submitManualOrder = async function(method){
         document.getElementById('checkoutError').textContent = 'Please enter your payment confirmation/reference first.';
         return;
     }
-    const res = await fetch('/.netlify/functions/manual-submit', {
+    const res = await fetch('fetch('/api/manual-submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
