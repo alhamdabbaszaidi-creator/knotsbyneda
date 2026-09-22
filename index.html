@@ -1089,7 +1089,7 @@ window.doGoogleLogin = async function(){
     const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-            redirectTo: "https://knotsbyneda.vercel.app"
+            redirectTo: window.location.origin
         }
     });
     if(error) document.getElementById('authError').textContent = error.message;
@@ -1099,7 +1099,7 @@ window.doGoogleSignup = async function(){
     const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-            redirectTo: "https://knotsbyneda.vercel.app"
+            redirectTo: window.location.origin
         }
     });
     if(error) document.getElementById('authError').textContent = error.message;
@@ -1198,7 +1198,7 @@ function renderPayPalButtons(){
         createOrder: async () => {
             const o = validateBasics();
             if(!o) throw new Error('validation failed');
-            const res = await fetch('/.netlify/functions/paypal-create-order', {
+            const res = await fetch('/api/paypal-create-order', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ product: o.product, quantity: o.quantity, price: selectedPrice })
@@ -1210,7 +1210,7 @@ function renderPayPalButtons(){
         onApprove: async (data) => {
             const o = validateBasics();
             if(!o) return;
-            const res = await fetch('/.netlify/functions/paypal-capture-order', {
+            const res = await fetch('/api/paypal-capture-order', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -1241,7 +1241,7 @@ window.submitManualOrder = async function(method){
         document.getElementById('checkoutError').textContent = 'Please enter your payment confirmation/reference first.';
         return;
     }
-    const res = await fetch('fetch('/api/manual-submit', {
+    const res = await fetch('/api/manual-submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
