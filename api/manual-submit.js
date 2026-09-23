@@ -1,23 +1,282 @@
-export default async (req, res) => {
-  if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
-  try {
-    const { accessToken, method, reference, order, total } = req.body;
-    if (!method || !reference || !order || !accessToken) return res.status(400).json({ error: "Missing required fields" });
-    const supabaseUrl = process.env.SUPABASE_URL;
-    const supabaseKey = process.env.SUPABASE_SERVICE_KEY;
-    const userResponse = await fetch(`${supabaseUrl}/auth/v1/user`, { headers: { Authorization: `Bearer ${accessToken}` } });
-    const userData = await userResponse.json();
-    const userId = userData.id;
-    if (!userId) return res.status(401).json({ error: "Unauthorized" });
-    const saveResponse = await fetch(`${supabaseUrl}/rest/v1/orders`, {
-      method: "POST",
-      headers: { Authorization: `Bearer ${supabaseKey}`, "Content-Type": "application/json", "Prefer": "return=representation" },
-      body: JSON.stringify({ user_id: userId, product: order.product, color: order.color, size: order.size, quantity: order.quantity, notes: order.notes, customer_name: order.customerName, customer_email: order.customerEmail, payment_method: method, status: "pending_manual_verification", total: total, manual_reference: reference }),
-    });
-    const dbOrder = await saveResponse.json();
-    if (!saveResponse.ok) return res.status(500).json({ error: "Order save failed", success: false });
-    return res.status(200).json({ success: true, order: dbOrder[0] });
-  } catch (error) {
-    return res.status(500).json({ error: error.message, success: false });
-  }
-};
+import {
+    getUser,
+    getPrice,
+    supabaseAdmin,
+    json
+} from "./_shared.js";
+
+
+export default async function handler(
+    req,
+    res
+){
+
+    if(req.method !== "POST"){
+
+        return json(
+            res,
+            405,
+            {
+                error:"Method not allowed."
+            }
+        );
+
+    }
+
+
+    try{
+
+        const user =
+            await getUser(req);
+
+
+        if(!user){
+
+            return json(
+                res,
+                401,
+                {
+                    error:"You must be signed in."
+                }
+            );
+
+        }
+
+
+        const {
+            method,
+            reference,
+            order
+        } =
+            req.body || {};
+
+
+        if(
+            !["zelle","cashapp"]
+                .includes(method)
+        ){
+
+            return json(
+                res,
+                400,
+                {
+                    error:"Invalid payment method."
+                }
+            );
+
+        }
+
+
+        if(!reference){
+
+            return json(
+                res,
+                400,
+                {
+                    error:
+                    "Payment reference is required."
+                }
+            );
+
+        }
+
+
+        const total =
+            getPrice(
+                order.product,
+                order.quantity
+            );
+
+
+        const admin =
+            supabaseAdmin();
+
+
+        const row = {
+
+            user_id:user.id,
+
+            product:order.product,
+
+            color:order.color,
+
+            size:order.size,
+
+            quantity:Number(
+                order.quantity
+            ),
+
+            notes:order.notes || "",
+
+            customer_name:
+                order.customerName,
+
+            customer_email:
+                order.customerEmail,
+
+            total:total,
+
+            payment_method:
+                method === "zelle"
+                    ? "Zelle"
+                    : "CashApp",
+
+            payment_reference:
+                reference,
+
+            status:
+                "pending_manual_verification"
+
+        };
+
+
+        const {
+            data,
+            error
+        } =
+            await admin
+                .from("orders")
+                .insert(row)
+                .select()
+                .single();
+
+
+        if(error){
+
+            console.error(error);
+
+            return json(
+                res,
+                500,
+                {
+                    error:
+                    "Could not save the order."
+                }
+            );
+
+        }
+
+
+        await sendEmail(data);
+
+
+        return json(
+            res,
+            200,
+            {
+                success:true,
+                total:total
+            }
+        );
+
+
+    }catch(error){
+
+        console.error(error);
+
+        return json(
+            res,
+            500,
+            {
+                error:
+                error.message ||
+                "Server error."
+            }
+        );
+
+    }
+}
+
+
+async function sendEmail(order){
+
+    const apiKey =
+        process.env.RESEND_API_KEY;
+
+    const from =
+        process.env.ORDER_FROM_EMAIL;
+
+
+    if(!apiKey || !from){
+
+        return;
+    }
+
+
+    const text = `
+
+Knots By Neda — Payment Verification Needed
+
+Customer:
+${order.customer_name}
+
+Email:
+${order.customer_email}
+
+Product:
+${order.product}
+
+Color:
+${order.color}
+
+Size:
+${order.size}
+
+Quantity:
+${order.quantity}
+
+Total:
+$${Number(order.total).toFixed(2)}
+
+Payment:
+${order.payment_method}
+
+Payment Reference:
+${order.payment_reference}
+
+Notes:
+${order.notes || "None"}
+
+Order ID:
+${order.id}
+
+Status:
+Pending Verification
+
+`;
+
+
+    await fetch(
+        "https://api.resend.com/emails",
+        {
+
+            method:"POST",
+
+            headers:{
+                "Authorization":
+                    "Bearer " + apiKey,
+
+                "Content-Type":
+                    "application/json"
+            },
+
+            body:JSON.stringify({
+
+                from:from,
+
+                to:[
+                    "snazaidi5@gmail.com"
+                ],
+
+                subject:
+                    "Payment Verification Needed — " +
+                    order.product,
+
+                text:text
+
+            })
+
+        }
+    );
+
+}
